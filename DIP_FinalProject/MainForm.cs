@@ -24,7 +24,14 @@ namespace DIP_FinalProject
         {
             if (_openFile.ShowDialog() == DialogResult.OK)
             {
-                _inputImages.Add(new Bitmap(_openFile.FileName));
+                int index = _listBoxInputImage.FindString(_openFile.FileName);
+                if (index == ListBox.NoMatches)
+                {
+                    _listBoxInputImage.Items.Add(_openFile.FileName);
+                    _inputImages.Add(new Bitmap(_openFile.FileName));
+                    index = _listBoxInputImage.Items.Count - 1;
+                }
+                _listBoxInputImage.SetSelected(index, true);
                 _openFile.FileName = "";
                 _openFile.InitialDirectory = _openFile.FileName.Substring(0, _openFile.FileName.Length - _openFile.SafeFileName.Length);
             }

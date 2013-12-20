@@ -32,11 +32,12 @@ namespace DIP_FinalProject
         private void InitializeComponent()
         {
             this._buttonLoadImage = new System.Windows.Forms.Button();
+            this._listBoxInputImage = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // _buttonLoadImage
             // 
-            this._buttonLoadImage.Location = new System.Drawing.Point(29, 205);
+            this._buttonLoadImage.Location = new System.Drawing.Point(29, 227);
             this._buttonLoadImage.Name = "_buttonLoadImage";
             this._buttonLoadImage.Size = new System.Drawing.Size(75, 23);
             this._buttonLoadImage.TabIndex = 0;
@@ -44,11 +45,22 @@ namespace DIP_FinalProject
             this._buttonLoadImage.UseVisualStyleBackColor = true;
             this._buttonLoadImage.Click += new System.EventHandler(this._buttonLoadImage_Click);
             // 
+            // _listBoxInputImage
+            // 
+            this._listBoxInputImage.FormattingEnabled = true;
+            this._listBoxInputImage.HorizontalScrollbar = true;
+            this._listBoxInputImage.ItemHeight = 12;
+            this._listBoxInputImage.Location = new System.Drawing.Point(10, 10);
+            this._listBoxInputImage.Name = "_listBoxInputImage";
+            this._listBoxInputImage.Size = new System.Drawing.Size(120, 196);
+            this._listBoxInputImage.TabIndex = 1;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this._listBoxInputImage);
             this.Controls.Add(this._buttonLoadImage);
             this.Name = "MainForm";
             this.Text = "Trapezium Segmentation";
@@ -61,6 +73,7 @@ namespace DIP_FinalProject
         private OpenFileDialog _openFile;
         private List<Bitmap> _inputImages;
         private System.Windows.Forms.Button _buttonLoadImage;
+        private ListBox _listBoxInputImage;
     }
 }
 
