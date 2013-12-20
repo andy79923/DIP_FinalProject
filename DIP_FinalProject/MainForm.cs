@@ -14,6 +14,20 @@ namespace DIP_FinalProject
         public MainForm()
         {
             InitializeComponent();
+            _inputImages = new List<Bitmap>();
+            _openFile = new OpenFileDialog();
+            _openFile.InitialDirectory = "C:";
+            _openFile.Filter = "Bitmap Files (.bmp)|*.bmp|JPEG (.jpg)|*.jpg|PNG (.png)|*.png|All Files|*.*";
+        }
+
+        private void _buttonLoadImage_Click(object sender, EventArgs e)
+        {
+            if (_openFile.ShowDialog() == DialogResult.OK)
+            {
+                _inputImages.Add(new Bitmap(_openFile.FileName));
+                _openFile.FileName = "";
+                _openFile.InitialDirectory = _openFile.FileName.Substring(0, _openFile.FileName.Length - _openFile.SafeFileName.Length);
+            }
         }
     }
 }

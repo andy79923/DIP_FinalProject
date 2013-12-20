@@ -1,4 +1,7 @@
-﻿namespace DIP_FinalProject
+﻿using System.Windows.Forms;
+using System.Drawing;
+using System.Collections.Generic;
+namespace DIP_FinalProject
 {
     partial class MainForm
     {
@@ -28,20 +31,36 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this._buttonLoadImage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // Form1
+            // _buttonLoadImage
+            // 
+            this._buttonLoadImage.Location = new System.Drawing.Point(29, 205);
+            this._buttonLoadImage.Name = "_buttonLoadImage";
+            this._buttonLoadImage.Size = new System.Drawing.Size(75, 23);
+            this._buttonLoadImage.TabIndex = 0;
+            this._buttonLoadImage.Text = "Load Image";
+            this._buttonLoadImage.UseVisualStyleBackColor = true;
+            this._buttonLoadImage.Click += new System.EventHandler(this._buttonLoadImage_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Name = "Form1";
+            this.Controls.Add(this._buttonLoadImage);
+            this.Name = "MainForm";
             this.Text = "Trapezium Segmentation";
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private OpenFileDialog _openFile;
+        private List<Bitmap> _inputImages;
+        private System.Windows.Forms.Button _buttonLoadImage;
     }
 }
 
