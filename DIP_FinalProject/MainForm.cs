@@ -36,5 +36,11 @@ namespace DIP_FinalProject
                 _openFile.InitialDirectory = _openFile.FileName.Substring(0, _openFile.FileName.Length - _openFile.SafeFileName.Length);
             }
         }
+
+        private void _listBoxInputImage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Bitmap inputImage = _inputImages[_listBoxInputImage.SelectedIndex];
+            _pictureBoxInputImage.Image = inputImage;
+        }
     }
 }
