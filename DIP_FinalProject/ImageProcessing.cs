@@ -341,5 +341,106 @@ namespace ImageProcessing
                 }
             }
         }
+
+        static public int[] MultilevelThresholding(ref Bitmap image, out Bitmap result, int levelNum)
+        {
+            result = new Bitmap(image.Width, image.Height);
+            int[] threshold = new int[levelNum - 1];
+            int[] T = new int[levelNum];
+            double globalMean = 0;
+            double[] histogram = new double[256];
+
+            double maxVariancee = 0;
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    histogram[image.GetPixel(x, y).R]++;
+                }
+            }
+            int totalNmu = image.Width * image.Height;
+            for (int i = 0; i < 256; i++)
+            {
+                histogram[i] /= totalNmu;
+                globalMean += i * histogram[i];
+            }
+            T[levelNum - 1] = 255;
+            int maxLevel = levelNum - 2;
+            int nowLevel = 0;
+            for (int i = 0; T[0] < 256 - levelNum + 1; i++)
+            {
+                T[nowLevel] = i;
+                if (nowLevel < maxLevel)
+                {
+
+                    nowLevel++;
+                    continue;
+                }
+                int k = 0;
+                double variance = 0;
+                double[] probability = new double[levelNum];
+                double[] mean = new double[levelNum];
+                for (int j = 0; j < 256; j++)
+                {
+                    if (j <= T[k])
+                    {
+                        probability[k] += histogram[j];
+                        mean[k] += j * histogram[j];
+                        continue;
+                    }
+                    else
+                    {
+                        mean[k] /= probability[k];
+                        variance += probability[k] * Math.Pow(mean[k] - globalMean, 2);
+                        k++;
+                        j--;
+                    }
+
+                }
+                mean[k] /= probability[k];
+                variance += probability[k] * Math.Pow(mean[k] - globalMean, 2);
+                if (variance > maxVariancee)
+                {
+                    maxVariancee = variance;
+                    for (int j = 0; j < levelNum - 1; j++)
+                    {
+                        threshold[j] = T[j];
+                    }
+                }
+                while (T[nowLevel] >= 255 && nowLevel > 0)
+                {
+                    nowLevel--;
+                    i = T[nowLevel];
+                }
+            }
+
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    int intensity = image.GetPixel(x, y).R;
+                    if (intensity <= threshold[0])
+                    {
+                        result.SetPixel(x, y, Color.FromArgb(0, 0, 0));
+                    }
+                    else if (intensity > threshold[levelNum - 2])
+                    {
+                        result.SetPixel(x, y, Color.FromArgb(255, 255, 255));
+                    }
+                    else
+                    {
+                        for (int k = 1; k < levelNum - 1; k++)
+                        {
+                            if (intensity <= threshold[k])
+                            {
+                                int value = (threshold[k - 1] + threshold[k]) / 2;
+                                result.SetPixel(x, y, Color.FromArgb(value, value, value));
+                            }
+                        }
+                    }
+                }
+            }
+            return threshold;
+        }
     }
 }
