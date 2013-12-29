@@ -460,61 +460,61 @@ namespace ImageProcessing
                 int seekCount = 0;
                 if (seed.X + 1 < image.Width)
                 {
-                    if (check[seed.Y, seed.X + 1] == false)
+                    int intensity = image.GetPixel(seed.X + 1, seed.Y).R;
+                    if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
                     {
-                        int intensity = image.GetPixel(seed.X + 1, seed.Y).R;
-                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        seekCount++;
+                        if (check[seed.Y, seed.X + 1] == false)
                         {
                             seeds.Enqueue(new Point(seed.X + 1, seed.Y));
                             region.Add(new Point(seed.X + 1, seed.Y));
-                            seekCount++;
+                            check[seed.Y, seed.X + 1] = true;
                         }
-                        check[seed.Y, seed.X + 1] = true;
                     }
                 }
 
                 if (seed.X - 1 >= 0)
                 {
-                    if (check[seed.Y, seed.X - 1] == false)
+                    int intensity = image.GetPixel(seed.X - 1, seed.Y).R;
+                    if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
                     {
-                        int intensity = image.GetPixel(seed.X - 1, seed.Y).R;
-                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        seekCount++;
+                        if (check[seed.Y, seed.X - 1] == false)
                         {
                             seeds.Enqueue(new Point(seed.X - 1, seed.Y));
-                            region.Add(new Point(seed.X -1, seed.Y));
-                            seekCount++;
+                            region.Add(new Point(seed.X - 1, seed.Y));
+                            check[seed.Y, seed.X - 1] = true;
                         }
-                        check[seed.Y, seed.X - 1] = true;
                     }
                 }
 
                 if (seed.Y + 1 < image.Height)
                 {
-                    if (check[seed.Y + 1, seed.X] == false)
+                    int intensity = image.GetPixel(seed.X, seed.Y + 1).R;
+                    if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
                     {
-                        int intensity = image.GetPixel(seed.X, seed.Y + 1).R;
-                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        seekCount++;
+                        if (check[seed.Y + 1, seed.X] == false)
                         {
                             seeds.Enqueue(new Point(seed.X, seed.Y + 1));
                             region.Add(new Point(seed.X, seed.Y + 1));
-                            seekCount++;
+                            check[seed.Y + 1, seed.X] = true;
                         }
-                        check[seed.Y + 1, seed.X] = true;
                     }
                 }
 
                 if (seed.Y - 1 >= 0)
                 {
-                    if (check[seed.Y - 1, seed.X] == false)
+                    int intensity = image.GetPixel(seed.X, seed.Y - 1).R;
+                    if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
                     {
-                        int intensity = image.GetPixel(seed.X, seed.Y - 1).R;
-                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        seekCount++;
+                        if (check[seed.Y - 1, seed.X] == false)
                         {
                             seeds.Enqueue(new Point(seed.X, seed.Y - 1));
                             region.Add(new Point(seed.X, seed.Y - 1));
-                            seekCount++;
+                            check[seed.Y - 1, seed.X] = true;
                         }
-                        check[seed.Y - 1, seed.X] = true;
                     }
                 }
 

@@ -58,7 +58,7 @@ namespace DIP_FinalProject
             int seedIntensity = image.GetPixel(seedPosition.X, seedPosition.Y).R;
             if (seedIntensity <= thresholdValue[0])
             {
-                regionRange.X = 0;
+                regionRange.X = -1;
                 regionRange.Y = thresholdValue[0];
             }
             else if (seedIntensity > thresholdValue[thresholdLevel - 2])
@@ -83,9 +83,7 @@ namespace DIP_FinalProject
             {
                 result.SetPixel(contour[i].X, contour[i].Y, Color.FromArgb(255, 0, 0));
             }
-
             _pictureBoxResult.Image = result;
-
         }
     }
 }
