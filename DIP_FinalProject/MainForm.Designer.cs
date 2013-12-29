@@ -34,7 +34,9 @@ namespace DIP_FinalProject
             this._buttonLoadImage = new System.Windows.Forms.Button();
             this._listBoxInputImage = new System.Windows.Forms.ListBox();
             this._pictureBoxInputImage = new System.Windows.Forms.PictureBox();
+            this._pictureBoxResult = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
             this.SuspendLayout();
             // 
             // _buttonLoadImage
@@ -69,17 +71,28 @@ namespace DIP_FinalProject
             this._pictureBoxInputImage.TabIndex = 2;
             this._pictureBoxInputImage.TabStop = false;
             // 
+            // _pictureBoxResult
+            // 
+            this._pictureBoxResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._pictureBoxResult.Location = new System.Drawing.Point(679, 10);
+            this._pictureBoxResult.Name = "_pictureBoxResult";
+            this._pictureBoxResult.Size = new System.Drawing.Size(512, 512);
+            this._pictureBoxResult.TabIndex = 3;
+            this._pictureBoxResult.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(715, 546);
+            this.ClientSize = new System.Drawing.Size(1286, 543);
+            this.Controls.Add(this._pictureBoxResult);
             this.Controls.Add(this._pictureBoxInputImage);
             this.Controls.Add(this._listBoxInputImage);
             this.Controls.Add(this._buttonLoadImage);
             this.Name = "MainForm";
             this.Text = "Trapezium Segmentation";
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -91,6 +104,7 @@ namespace DIP_FinalProject
         private System.Windows.Forms.Button _buttonLoadImage;
         private ListBox _listBoxInputImage;
         private PictureBox _pictureBoxInputImage;
+        private PictureBox _pictureBoxResult;
     }
 }
 
