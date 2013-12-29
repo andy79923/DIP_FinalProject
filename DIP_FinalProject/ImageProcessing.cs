@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
-namespace DIP_hw1
+namespace ImageProcessing
 {
     class ImageProcessing
     {
