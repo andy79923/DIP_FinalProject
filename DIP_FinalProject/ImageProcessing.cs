@@ -285,5 +285,32 @@ namespace ImageProcessing
             }
         }
 
+        static public void Laplacian(ref Bitmap image, out int[,] result)
+        {
+            result = new int[image.Height, image.Width];
+            int[,] filter = new int[,] { { 0, -1, 0 }, { -1, 4, -1 }, { 0, -1, 0 } };
+
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    int intensity = 0;
+                    for (int j = 0; j < 3; j++)//Use replicate to interpolate the pixel when the filter position is out of the boundary of the source image
+                    {
+                        int wY = y - 3 / 2 + j;
+                        wY = (wY < 0) ? 0 : wY;
+                        wY = (wY >= image.Height) ? image.Height - 1 : wY;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int wX = x - 3 / 2 + i;
+                            wX = (wX < 0) ? 0 : wX;
+                            wX = (wX >= image.Width) ? image.Width - 1 : wX;
+                            intensity += (image.GetPixel(wX, wY).R * filter[i, j]);
+                        }
+                    }
+                    result[y, x] = intensity;
+                }
+            }
+        }
     }
 }
