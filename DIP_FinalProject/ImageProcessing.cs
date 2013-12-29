@@ -6,6 +6,7 @@ using System.Drawing;
 
 namespace ImageProcessing
 {
+    delegate void SmoothingMethod(ref Bitmap image, out Bitmap result, int filterSize);
     class ImageProcessing
     {
         static public void RGBExtraction(ref Bitmap image, out List<Bitmap> results)
@@ -263,6 +264,23 @@ namespace ImageProcessing
                     intensity = (intensity < 0) ? 0 : intensity;
                     intensity = (intensity > 255) ? 255 : intensity;
                     result.SetPixel(rX, rY, Color.FromArgb(intensity, intensity, intensity));
+                }
+            }
+        }
+
+        static public void UnsharpMasking(ref Bitmap image, out Bitmap result, SmoothingMethod smoothing, int smoothingSize, double weight)
+        {
+            Bitmap smoothingResult;
+            result = new Bitmap(image.Width, image.Height);
+            smoothing(ref image, out smoothingResult, smoothingSize);
+            for (int y = 0; y < result.Height; y++)
+            {
+                for (int x = 0; x < result.Width; x++)
+                {
+                    double intensity = ((1.0 + weight) * (double)image.GetPixel(x, y).R - weight * (double)smoothingResult.GetPixel(x, y).R);
+                    intensity = (intensity < 0) ? 0 : intensity;
+                    intensity = (intensity > 255) ? 255 : intensity;
+                    result.SetPixel(x, y, Color.FromArgb((int)intensity, (int)intensity, (int)intensity));
                 }
             }
         }
