@@ -442,5 +442,87 @@ namespace ImageProcessing
             }
             return threshold;
         }
+
+        static private void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
+        {
+            region = new List<Point>();
+            contour = new List<Point>();
+            int threshold = image.GetPixel(originalSeed.X, originalSeed.Y).R;
+            bool[,] check = new bool[image.Height, image.Width];
+            check[originalSeed.Y, originalSeed.X] = true;
+
+            Queue<Point> seeds = new Queue<Point>();
+            seeds.Enqueue(originalSeed);
+
+            while (seeds.Count != 0)
+            {
+                Point seed = seeds.Dequeue();
+                int seekCount = 0;
+                if (seed.X + 1 < image.Width)
+                {
+                    if (check[seed.Y, seed.X + 1] == false)
+                    {
+                        int intensity = image.GetPixel(seed.X + 1, seed.Y).R;
+                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        {
+                            seeds.Enqueue(new Point(seed.X + 1, seed.Y));
+                            region.Add(new Point(seed.X + 1, seed.Y));
+                            seekCount++;
+                        }
+                        check[seed.Y, seed.X + 1] = true;
+                    }
+                }
+
+                if (seed.X - 1 >= 0)
+                {
+                    if (check[seed.Y, seed.X - 1] == false)
+                    {
+                        int intensity = image.GetPixel(seed.X - 1, seed.Y).R;
+                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        {
+                            seeds.Enqueue(new Point(seed.X - 1, seed.Y));
+                            region.Add(new Point(seed.X -1, seed.Y));
+                            seekCount++;
+                        }
+                        check[seed.Y, seed.X - 1] = true;
+                    }
+                }
+
+                if (seed.Y + 1 < image.Height)
+                {
+                    if (check[seed.Y + 1, seed.X] == false)
+                    {
+                        int intensity = image.GetPixel(seed.X, seed.Y + 1).R;
+                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        {
+                            seeds.Enqueue(new Point(seed.X, seed.Y + 1));
+                            region.Add(new Point(seed.X, seed.Y + 1));
+                            seekCount++;
+                        }
+                        check[seed.Y + 1, seed.X] = true;
+                    }
+                }
+
+                if (seed.Y - 1 >= 0)
+                {
+                    if (check[seed.Y - 1, seed.X] == false)
+                    {
+                        int intensity = image.GetPixel(seed.X, seed.Y - 1).R;
+                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        {
+                            seeds.Enqueue(new Point(seed.X, seed.Y - 1));
+                            region.Add(new Point(seed.X, seed.Y - 1));
+                            seekCount++;
+                        }
+                        check[seed.Y - 1, seed.X] = true;
+                    }
+                }
+
+                if (seekCount < 4)
+                {
+                    contour.Add(new Point(seed.X, seed.Y));
+                }
+            }
+        }
     }
 }
