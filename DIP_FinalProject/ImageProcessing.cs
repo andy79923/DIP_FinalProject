@@ -443,7 +443,7 @@ namespace ImageProcessing
             return threshold;
         }
 
-        static private void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
+        static public void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
         {
             region = new List<Point>();
             contour = new List<Point>();

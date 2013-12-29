@@ -42,5 +42,50 @@ namespace DIP_FinalProject
             Bitmap inputImage = _inputImages[_listBoxInputImage.SelectedIndex];
             _pictureBoxInputImage.Image = inputImage;
         }
+
+        private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)
+        {
+            Bitmap image = _inputImages[_listBoxInputImage.SelectedIndex];
+            Bitmap result = new Bitmap(image);
+            List<Point> region;
+            List<Point> contour;
+            Point seedPosition = new Point(e.X, e.Y);
+            Bitmap thresholdImage;
+            int thresholdLevel=3;
+            int[] thresholdValue;
+            thresholdValue = ImageProcessing.ImageProcessing.MultilevelThresholding(ref image, out thresholdImage, thresholdLevel);
+            Point regionRange=new Point();
+            int seedIntensity = image.GetPixel(seedPosition.X, seedPosition.Y).R;
+            if (seedIntensity <= thresholdValue[0])
+            {
+                regionRange.X = 0;
+                regionRange.Y = thresholdValue[0];
+            }
+            else if (seedIntensity > thresholdValue[thresholdLevel - 2])
+            {
+                regionRange.X = thresholdValue[thresholdLevel - 2];
+                regionRange.Y = 255;
+            }
+            else
+            {
+                for (int i = 0; i < thresholdLevel - 2; i++)
+                {
+                    if (seedIntensity > thresholdValue[i] && seedIntensity <= thresholdValue[i + 1])
+                    {
+                        regionRange.X = thresholdValue[i];
+                        regionRange.Y = thresholdValue[i + 1];
+                        break;
+                    }
+                }
+            }
+            ImageProcessing.ImageProcessing.RegionGrowing(ref thresholdImage, out region, out contour, seedPosition, regionRange);
+            for (int i = 0; i < contour.Count; i++)
+            {
+                result.SetPixel(contour[i].X, contour[i].Y, Color.FromArgb(255, 0, 0));
+            }
+
+            _pictureBoxResult.Image = result;
+
+        }
     }
 }

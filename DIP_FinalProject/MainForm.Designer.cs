@@ -70,6 +70,7 @@ namespace DIP_FinalProject
             this._pictureBoxInputImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this._pictureBoxInputImage.TabIndex = 2;
             this._pictureBoxInputImage.TabStop = false;
+            this._pictureBoxInputImage.MouseClick += new System.Windows.Forms.MouseEventHandler(this._pictureBoxInputImage_MouseClick);
             // 
             // _pictureBoxResult
             // 
