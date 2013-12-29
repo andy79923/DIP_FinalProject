@@ -312,5 +312,34 @@ namespace ImageProcessing
                 }
             }
         }
+
+        static public void LocalBinaryPattern(ref Bitmap image, out Bitmap result)// only use 3X3 filter to detect the texture
+        {
+            result = new Bitmap(image.Width, image.Height);
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    int intensity = 0;
+                    int weight = 1;
+                    for (int j = 0; j < 3; j++)//Use replicate to interpolate the pixel when the filter position is out of the boundary of the source image
+                    {
+                        int wY = y - 3 / 2 + j;
+                        wY = (wY < 0) ? 0 : wY;
+                        wY = (wY >= image.Height) ? image.Height - 1 : wY;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (j == 1 && i == 1) continue;
+                            int wX = x - 3 / 2 + i;
+                            wX = (wX < 0) ? 0 : wX;
+                            wX = (wX >= image.Width) ? image.Width - 1 : wX;
+                            intensity += ((image.GetPixel(x, y).R - image.GetPixel(wX, wY).R >= 0) ? 1 : 0) * weight;
+                            weight *= 2;
+                        }
+                    }
+                    result.SetPixel(x, y, Color.FromArgb(intensity, intensity, intensity));
+                }
+            }
+        }
     }
 }
