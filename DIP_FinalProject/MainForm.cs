@@ -18,6 +18,7 @@ namespace DIP_FinalProject
             _openFile = new OpenFileDialog();
             _openFile.InitialDirectory = "C:";
             _openFile.Filter = "Bitmap Files (.bmp)|*.bmp|JPEG (.jpg)|*.jpg|PNG (.png)|*.png|All Files|*.*";
+            _thresholdingLevel = 3;
         }
 
         private void _buttonLoadImage_Click(object sender, EventArgs e)
@@ -41,49 +42,46 @@ namespace DIP_FinalProject
         {
             Bitmap inputImage = _inputImages[_listBoxInputImage.SelectedIndex];
             _pictureBoxInputImage.Image = inputImage;
+            _pictureBoxResult.Image = inputImage;
+
+            _thresholdingRange = ImageProcessing.ImageProcessing.MultilevelThresholding(ref inputImage, out _thresholdingImage, _thresholdingLevel);
         }
 
         private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)
         {
             Bitmap image = _inputImages[_listBoxInputImage.SelectedIndex];
-            Bitmap result = new Bitmap(image);
-            List<Point> region;
-            List<Point> contour;
+            _result = new Bitmap(image);
             Point seedPosition = new Point(e.X, e.Y);
-            Bitmap thresholdImage;
-            int thresholdLevel=3;
-            int[] thresholdValue;
-            thresholdValue = ImageProcessing.ImageProcessing.MultilevelThresholding(ref image, out thresholdImage, thresholdLevel);
             Point regionRange=new Point();
             int seedIntensity = image.GetPixel(seedPosition.X, seedPosition.Y).R;
-            if (seedIntensity <= thresholdValue[0])
+            if (seedIntensity <= _thresholdingRange[0])
             {
                 regionRange.X = -1;
-                regionRange.Y = thresholdValue[0];
+                regionRange.Y = _thresholdingRange[0];
             }
-            else if (seedIntensity > thresholdValue[thresholdLevel - 2])
+            else if (seedIntensity > _thresholdingRange[_thresholdingLevel - 2])
             {
-                regionRange.X = thresholdValue[thresholdLevel - 2];
+                regionRange.X = _thresholdingRange[_thresholdingLevel - 2];
                 regionRange.Y = 255;
             }
             else
             {
-                for (int i = 0; i < thresholdLevel - 2; i++)
+                for (int i = 0; i < _thresholdingLevel - 2; i++)
                 {
-                    if (seedIntensity > thresholdValue[i] && seedIntensity <= thresholdValue[i + 1])
+                    if (seedIntensity > _thresholdingRange[i] && seedIntensity <= _thresholdingRange[i + 1])
                     {
-                        regionRange.X = thresholdValue[i];
-                        regionRange.Y = thresholdValue[i + 1];
+                        regionRange.X = _thresholdingRange[i];
+                        regionRange.Y = _thresholdingRange[i + 1];
                         break;
                     }
                 }
             }
-            ImageProcessing.ImageProcessing.RegionGrowing(ref thresholdImage, out region, out contour, seedPosition, regionRange);
-            for (int i = 0; i < contour.Count; i++)
+            ImageProcessing.ImageProcessing.RegionGrowing(ref _thresholdingImage, out _region, out _contour, seedPosition, regionRange);
+            for (int i = 0; i < _contour.Count; i++)
             {
-                result.SetPixel(contour[i].X, contour[i].Y, Color.FromArgb(255, 0, 0));
+                _result.SetPixel(_contour[i].X, _contour[i].Y, Color.FromArgb(255, 0, 0));
             }
-            _pictureBoxResult.Image = result;
+            _pictureBoxResult.Image = _result;
         }
     }
 }
