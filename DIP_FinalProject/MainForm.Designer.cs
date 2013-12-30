@@ -39,6 +39,10 @@ namespace DIP_FinalProject
             this._radioButtonMeasurementMode = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this._buttonGroundTruth = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this._labelMAD = new System.Windows.Forms.Label();
+            this._labelDSC = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -131,11 +135,51 @@ namespace DIP_FinalProject
             this._buttonGroundTruth.UseVisualStyleBackColor = true;
             this._buttonGroundTruth.Click += new System.EventHandler(this._buttonGroundTruth_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(29, 416);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 12);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "MAD: ";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(29, 448);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(33, 12);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "DSC: ";
+            // 
+            // _labelMAD
+            // 
+            this._labelMAD.AutoSize = true;
+            this._labelMAD.Location = new System.Drawing.Point(73, 415);
+            this._labelMAD.Name = "_labelMAD";
+            this._labelMAD.Size = new System.Drawing.Size(11, 12);
+            this._labelMAD.TabIndex = 10;
+            this._labelMAD.Text = "0";
+            // 
+            // _labelDSC
+            // 
+            this._labelDSC.AutoSize = true;
+            this._labelDSC.Location = new System.Drawing.Point(73, 448);
+            this._labelDSC.Name = "_labelDSC";
+            this._labelDSC.Size = new System.Drawing.Size(11, 12);
+            this._labelDSC.TabIndex = 11;
+            this._labelDSC.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1286, 543);
+            this.Controls.Add(this._labelDSC);
+            this.Controls.Add(this._labelMAD);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this._buttonGroundTruth);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this._pictureBoxResult);
@@ -149,6 +193,7 @@ namespace DIP_FinalProject
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -171,6 +216,10 @@ namespace DIP_FinalProject
         private RadioButton _radioButtonMeasurementMode;
         private GroupBox groupBox1;
         private Button _buttonGroundTruth;
+        private Label label1;
+        private Label label2;
+        private Label _labelMAD;
+        private Label _labelDSC;
     }
 }
 

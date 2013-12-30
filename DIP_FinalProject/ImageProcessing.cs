@@ -572,7 +572,7 @@ namespace ImageProcessing
                     }
                 }
             }
-            return 2 * intersection / (regionA.Count + regionB.Count);
+            return 2 * intersection / (double)(regionA.Count + regionB.Count);
         }
     }
 }
