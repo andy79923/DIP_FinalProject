@@ -37,15 +37,18 @@ namespace DIP_FinalProject
             this._pictureBoxResult = new System.Windows.Forms.PictureBox();
             this._radioButtonSegmentationMode = new System.Windows.Forms.RadioButton();
             this._radioButtonMeasurementMode = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this._groupBoxMode = new System.Windows.Forms.GroupBox();
             this._buttonGroundTruth = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this._labelMAD = new System.Windows.Forms.Label();
             this._labelDSC = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this._labelInput = new System.Windows.Forms.Label();
+            this._labelGroundTruth = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this._groupBoxMode.SuspendLayout();
             this.SuspendLayout();
             // 
             // _buttonLoadImage
@@ -114,19 +117,21 @@ namespace DIP_FinalProject
             this._radioButtonMeasurementMode.UseVisualStyleBackColor = true;
             this._radioButtonMeasurementMode.CheckedChanged += new System.EventHandler(this._radioButtonMode_CheckedChanged);
             // 
-            // groupBox1
+            // _groupBoxMode
             // 
-            this.groupBox1.Controls.Add(this._radioButtonSegmentationMode);
-            this.groupBox1.Controls.Add(this._radioButtonMeasurementMode);
-            this.groupBox1.Location = new System.Drawing.Point(29, 274);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(101, 72);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Mode";
+            this._groupBoxMode.Controls.Add(this._radioButtonSegmentationMode);
+            this._groupBoxMode.Controls.Add(this._radioButtonMeasurementMode);
+            this._groupBoxMode.Enabled = false;
+            this._groupBoxMode.Location = new System.Drawing.Point(29, 274);
+            this._groupBoxMode.Name = "_groupBoxMode";
+            this._groupBoxMode.Size = new System.Drawing.Size(101, 72);
+            this._groupBoxMode.TabIndex = 6;
+            this._groupBoxMode.TabStop = false;
+            this._groupBoxMode.Text = "Mode";
             // 
             // _buttonGroundTruth
             // 
+            this._buttonGroundTruth.Enabled = false;
             this._buttonGroundTruth.Location = new System.Drawing.Point(29, 371);
             this._buttonGroundTruth.Name = "_buttonGroundTruth";
             this._buttonGroundTruth.Size = new System.Drawing.Size(111, 23);
@@ -171,17 +176,51 @@ namespace DIP_FinalProject
             this._labelDSC.TabIndex = 11;
             this._labelDSC.Text = "0";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label3.Location = new System.Drawing.Point(928, 525);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(58, 21);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Result";
+            // 
+            // _labelInput
+            // 
+            this._labelInput.AutoSize = true;
+            this._labelInput.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this._labelInput.Location = new System.Drawing.Point(376, 525);
+            this._labelInput.Name = "_labelInput";
+            this._labelInput.Size = new System.Drawing.Size(51, 21);
+            this._labelInput.TabIndex = 13;
+            this._labelInput.Text = "Input";
+            // 
+            // _labelGroundTruth
+            // 
+            this._labelGroundTruth.AutoSize = true;
+            this._labelGroundTruth.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this._labelGroundTruth.Location = new System.Drawing.Point(339, 525);
+            this._labelGroundTruth.Name = "_labelGroundTruth";
+            this._labelGroundTruth.Size = new System.Drawing.Size(113, 21);
+            this._labelGroundTruth.TabIndex = 14;
+            this._labelGroundTruth.Text = "Ground Truth";
+            this._labelGroundTruth.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1286, 543);
+            this.ClientSize = new System.Drawing.Size(1215, 558);
+            this.Controls.Add(this._labelGroundTruth);
+            this.Controls.Add(this._labelInput);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this._labelDSC);
             this.Controls.Add(this._labelMAD);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this._buttonGroundTruth);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this._groupBoxMode);
             this.Controls.Add(this._pictureBoxResult);
             this.Controls.Add(this._pictureBoxInputImage);
             this.Controls.Add(this._listBoxInputImage);
@@ -190,8 +229,8 @@ namespace DIP_FinalProject
             this.Text = "Trapezium Segmentation";
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this._groupBoxMode.ResumeLayout(false);
+            this._groupBoxMode.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,12 +253,15 @@ namespace DIP_FinalProject
         private PictureBox _pictureBoxResult;
         private RadioButton _radioButtonSegmentationMode;
         private RadioButton _radioButtonMeasurementMode;
-        private GroupBox groupBox1;
+        private GroupBox _groupBoxMode;
         private Button _buttonGroundTruth;
         private Label label1;
         private Label label2;
         private Label _labelMAD;
         private Label _labelDSC;
+        private Label label3;
+        private Label _labelInput;
+        private Label _labelGroundTruth;
     }
 }
 

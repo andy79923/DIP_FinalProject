@@ -49,6 +49,7 @@ namespace DIP_FinalProject
 
         private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)
         {
+            _groupBoxMode.Enabled = true;
             if (_radioButtonSegmentationMode.Checked == false)
             {
                 return;
@@ -90,15 +91,29 @@ namespace DIP_FinalProject
 
         private void _radioButtonMode_CheckedChanged(object sender, EventArgs e)
         {
-            if (_radioButtonSegmentationMode.Enabled == true && _radioButtonSegmentationMode.Checked == true)
+            if (_groupBoxMode.Enabled == false)
+            {
+                return;
+            }
+            if (_radioButtonSegmentationMode.Checked == true)
             {
                 _listBoxInputImage.Enabled = true;
+                _buttonLoadImage.Enabled = true;
+                _buttonGroundTruth.Enabled = false;
+                _labelMAD.Text = "0";
+                _labelDSC.Text = "0";
+                _labelGroundTruth.Visible = false;
+                _labelInput.Visible = true;
                 _pictureBoxInputImage.Image = _inputImages[_listBoxInputImage.SelectedIndex];
             }
-            else if (_radioButtonMeasurementMode.Enabled == true && _radioButtonMeasurementMode.Checked == true)
+            else if (_radioButtonMeasurementMode.Checked == true)
             {
                 _pictureBoxInputImage.Image = null;
                 _listBoxInputImage.Enabled = false;
+                _buttonLoadImage.Enabled = false;
+                _buttonGroundTruth.Enabled = true;
+                _labelInput.Visible = false;
+                _labelGroundTruth.Visible = true;
             }
         }
 
@@ -134,6 +149,13 @@ namespace DIP_FinalProject
                             region.Add(new Point(i, y));
                         }
                     }
+                }
+
+                if (contour.Count == 0 || region.Count == 0)
+                {
+                    _labelMAD.Text = "0";
+                    _labelDSC.Text = "0";
+                    return;
                 }
 
                 _labelMAD.Text = ImageProcessing.ImageProcessing.MeanOfAbsoluteDifference(ref _contour, ref  contour, Math.Sqrt(Math.Pow(_groundTruthImage.Width, 2) + Math.Pow(_groundTruthImage.Height, 2))).ToString("0.00");
