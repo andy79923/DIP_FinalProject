@@ -49,6 +49,10 @@ namespace DIP_FinalProject
 
         private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)
         {
+            if (_radioButtonSegmentationMode.Checked == false)
+            {
+                return;
+            }
             Bitmap image = _inputImages[_listBoxInputImage.SelectedIndex];
             _result = new Bitmap(image);
             Point seedPosition = new Point(e.X, e.Y);
@@ -82,6 +86,20 @@ namespace DIP_FinalProject
                 _result.SetPixel(_contour[i].X, _contour[i].Y, Color.FromArgb(255, 0, 0));
             }
             _pictureBoxResult.Image = _result;
+        }
+
+        private void _radioButtonMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_radioButtonSegmentationMode.Enabled == true && _radioButtonSegmentationMode.Checked == true)
+            {
+                _listBoxInputImage.Enabled = true;
+                _pictureBoxInputImage.Image = _inputImages[_listBoxInputImage.SelectedIndex];
+            }
+            else if (_radioButtonMeasurementMode.Enabled == true && _radioButtonMeasurementMode.Checked == true)
+            {
+                _pictureBoxInputImage.Image = null;
+                _listBoxInputImage.Enabled = false;
+            }
         }
     }
 }

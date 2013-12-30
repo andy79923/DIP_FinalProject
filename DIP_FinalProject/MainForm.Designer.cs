@@ -35,8 +35,12 @@ namespace DIP_FinalProject
             this._listBoxInputImage = new System.Windows.Forms.ListBox();
             this._pictureBoxInputImage = new System.Windows.Forms.PictureBox();
             this._pictureBoxResult = new System.Windows.Forms.PictureBox();
+            this._radioButtonSegmentationMode = new System.Windows.Forms.RadioButton();
+            this._radioButtonMeasurementMode = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // _buttonLoadImage
@@ -81,11 +85,47 @@ namespace DIP_FinalProject
             this._pictureBoxResult.TabIndex = 3;
             this._pictureBoxResult.TabStop = false;
             // 
+            // _radioButtonSegmentationMode
+            // 
+            this._radioButtonSegmentationMode.AutoSize = true;
+            this._radioButtonSegmentationMode.Checked = true;
+            this._radioButtonSegmentationMode.Location = new System.Drawing.Point(6, 21);
+            this._radioButtonSegmentationMode.Name = "_radioButtonSegmentationMode";
+            this._radioButtonSegmentationMode.Size = new System.Drawing.Size(86, 16);
+            this._radioButtonSegmentationMode.TabIndex = 4;
+            this._radioButtonSegmentationMode.TabStop = true;
+            this._radioButtonSegmentationMode.Text = "Segmentation";
+            this._radioButtonSegmentationMode.UseVisualStyleBackColor = true;
+            this._radioButtonSegmentationMode.CheckedChanged += new System.EventHandler(this._radioButtonMode_CheckedChanged);
+            // 
+            // _radioButtonMeasurementMode
+            // 
+            this._radioButtonMeasurementMode.AutoSize = true;
+            this._radioButtonMeasurementMode.Location = new System.Drawing.Point(6, 43);
+            this._radioButtonMeasurementMode.Name = "_radioButtonMeasurementMode";
+            this._radioButtonMeasurementMode.Size = new System.Drawing.Size(85, 16);
+            this._radioButtonMeasurementMode.TabIndex = 5;
+            this._radioButtonMeasurementMode.Text = "Measurement";
+            this._radioButtonMeasurementMode.UseVisualStyleBackColor = true;
+            this._radioButtonMeasurementMode.CheckedChanged += new System.EventHandler(this._radioButtonMode_CheckedChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this._radioButtonSegmentationMode);
+            this.groupBox1.Controls.Add(this._radioButtonMeasurementMode);
+            this.groupBox1.Location = new System.Drawing.Point(29, 274);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(101, 72);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Mode";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1286, 543);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this._pictureBoxResult);
             this.Controls.Add(this._pictureBoxInputImage);
             this.Controls.Add(this._listBoxInputImage);
@@ -94,6 +134,8 @@ namespace DIP_FinalProject
             this.Text = "Trapezium Segmentation";
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -112,6 +154,9 @@ namespace DIP_FinalProject
         private ListBox _listBoxInputImage;
         private PictureBox _pictureBoxInputImage;
         private PictureBox _pictureBoxResult;
+        private RadioButton _radioButtonSegmentationMode;
+        private RadioButton _radioButtonMeasurementMode;
+        private GroupBox groupBox1;
     }
 }
 
