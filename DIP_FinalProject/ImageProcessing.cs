@@ -558,5 +558,21 @@ namespace ImageProcessing
             minDistanceB /= contourB.Count;
             return (minDistanceA + minDistanceB) / 2;
         }
+
+        static public double DiceSimilarityCoefficient(ref List<Point> regionA, ref List<Point> regionB)
+        {
+            int intersection = 0;
+            for (int i = 0; i < regionA.Count; i++)
+            {
+                for (int j = 0; j < regionB.Count; j++)
+                {
+                    if (regionA[i] == regionB[j])
+                    {
+                        intersection++;
+                    }
+                }
+            }
+            return 2 * intersection / (regionA.Count + regionB.Count);
+        }
     }
 }
