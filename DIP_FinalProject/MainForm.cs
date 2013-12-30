@@ -101,5 +101,42 @@ namespace DIP_FinalProject
                 _listBoxInputImage.Enabled = false;
             }
         }
+
+        private void _buttonGroundTruth_Click(object sender, EventArgs e)
+        {
+            if (_openFile.ShowDialog() == DialogResult.OK)
+            {
+                
+                _groundTruthImage=new Bitmap(_openFile.FileName);
+                _openFile.FileName = "";
+                _openFile.InitialDirectory = _openFile.FileName.Substring(0, _openFile.FileName.Length - _openFile.SafeFileName.Length);
+                _pictureBoxInputImage.Image = _groundTruthImage;
+                List<Point> contour = new List<Point>();
+                List<Point> region = new List<Point>();
+                for (int y = 0; y < _groundTruthImage.Height; y++)
+                {
+                    List<Point> rangePoint = new List<Point>();
+                    for (int x = 0; x < _groundTruthImage.Width; x++)
+                    {
+                        Color RGB = _groundTruthImage.GetPixel(x, y);
+                        if (RGB.R != RGB.G || RGB.R != RGB.B || RGB.G != RGB.B)
+                        {
+                            contour.Add(new Point(x, y));
+                            rangePoint.Add(new Point(x, y));
+                        }
+                    }
+                    if (rangePoint.Count != 0)
+                    {
+                        int leftX = rangePoint[0].X;
+                        int rightX = rangePoint[rangePoint.Count - 1].X;
+                        for (int i = leftX; i <= rightX; i++)
+                        {
+                            region.Add(new Point(i, y));
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

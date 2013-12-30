@@ -38,6 +38,7 @@ namespace DIP_FinalProject
             this._radioButtonSegmentationMode = new System.Windows.Forms.RadioButton();
             this._radioButtonMeasurementMode = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this._buttonGroundTruth = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -120,11 +121,22 @@ namespace DIP_FinalProject
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mode";
             // 
+            // _buttonGroundTruth
+            // 
+            this._buttonGroundTruth.Location = new System.Drawing.Point(29, 371);
+            this._buttonGroundTruth.Name = "_buttonGroundTruth";
+            this._buttonGroundTruth.Size = new System.Drawing.Size(111, 23);
+            this._buttonGroundTruth.TabIndex = 7;
+            this._buttonGroundTruth.Text = "Load Ground Truth";
+            this._buttonGroundTruth.UseVisualStyleBackColor = true;
+            this._buttonGroundTruth.Click += new System.EventHandler(this._buttonGroundTruth_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1286, 543);
+            this.Controls.Add(this._buttonGroundTruth);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this._pictureBoxResult);
             this.Controls.Add(this._pictureBoxInputImage);
@@ -144,6 +156,7 @@ namespace DIP_FinalProject
 
         private OpenFileDialog _openFile;
         private List<Bitmap> _inputImages;
+        Bitmap _groundTruthImage;
         List<Point> _region;
         List<Point> _contour;
         Bitmap _result;
@@ -157,6 +170,7 @@ namespace DIP_FinalProject
         private RadioButton _radioButtonSegmentationMode;
         private RadioButton _radioButtonMeasurementMode;
         private GroupBox groupBox1;
+        private Button _buttonGroundTruth;
     }
 }
 
