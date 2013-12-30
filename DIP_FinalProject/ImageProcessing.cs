@@ -524,5 +524,39 @@ namespace ImageProcessing
                 }
             }
         }
+        static public double MeanOfAbsoluteDifference(ref List<Point> contourA, ref List<Point> contourB, double maxDistance)
+        {
+            double MAD = 0;
+            double minDistanceA = 0, minDistanceB = 0;
+            for (int i = 0; i < contourA.Count; i++)
+            {
+                double minDistance = maxDistance;
+                for (int j = 0; j < contourB.Count; j++)
+                {
+                    double distance = Math.Sqrt(Math.Pow(contourA[i].X - contourB[j].X, 2) + Math.Pow(contourA[i].Y - contourB[j].Y, 2));
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                }
+                minDistanceA += minDistance;
+            }
+            minDistanceA /= contourA.Count;
+            for (int i = 0; i < contourB.Count; i++)
+            {
+                double minDistance = maxDistance;
+                for (int j = 0; j < contourA.Count; j++)
+                {
+                    double distance = Math.Sqrt(Math.Pow(contourB[i].X - contourA[j].X, 2) + Math.Pow(contourB[i].Y - contourA[j].Y, 2));
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                }
+                minDistanceB += minDistance;
+            }
+            minDistanceB /= contourB.Count;
+            return (minDistanceA + minDistanceB) / 2;
+        }
     }
 }
