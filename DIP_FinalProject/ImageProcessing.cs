@@ -342,14 +342,12 @@ namespace ImageProcessing
             }
         }
 
-        static public int[] MultilevelThresholding(ref Bitmap image, out Bitmap result, int levelNum)
+        static public int[] OtsuMethod(ref Bitmap image, int levelNum)
         {
-            result = new Bitmap(image.Width, image.Height);
             int[] threshold = new int[levelNum - 1];
             int[] T = new int[levelNum];
             double globalMean = 0;
             double[] histogram = new double[256];
-
             double maxVariancee = 0;
             for (int y = 0; y < image.Height; y++)
             {
@@ -364,6 +362,7 @@ namespace ImageProcessing
                 histogram[i] /= totalNmu;
                 globalMean += i * histogram[i];
             }
+
             T[levelNum - 1] = 255;
             int maxLevel = levelNum - 2;
             int nowLevel = 0;
@@ -413,6 +412,13 @@ namespace ImageProcessing
                     i = T[nowLevel];
                 }
             }
+            return threshold;
+        }
+
+        static public int[] MultilevelThresholding(ref Bitmap image, out Bitmap result, int levelNum)
+        {
+            result = new Bitmap(image.Width, image.Height);
+            int[] threshold = OtsuMethod(ref image, levelNum);
 
             for (int y = 0; y < image.Height; y++)
             {
