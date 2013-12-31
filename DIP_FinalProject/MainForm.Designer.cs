@@ -46,6 +46,7 @@ namespace DIP_FinalProject
             this.label3 = new System.Windows.Forms.Label();
             this._labelInput = new System.Windows.Forms.Label();
             this._labelGroundTruth = new System.Windows.Forms.Label();
+            this._buttonSaveResult = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxInputImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictureBoxResult)).BeginInit();
             this._groupBoxMode.SuspendLayout();
@@ -207,11 +208,22 @@ namespace DIP_FinalProject
             this._labelGroundTruth.Text = "Ground Truth";
             this._labelGroundTruth.Visible = false;
             // 
+            // _buttonSaveResult
+            // 
+            this._buttonSaveResult.Location = new System.Drawing.Point(29, 486);
+            this._buttonSaveResult.Name = "_buttonSaveResult";
+            this._buttonSaveResult.Size = new System.Drawing.Size(75, 23);
+            this._buttonSaveResult.TabIndex = 15;
+            this._buttonSaveResult.Text = "Save Result";
+            this._buttonSaveResult.UseVisualStyleBackColor = true;
+            this._buttonSaveResult.Click += new System.EventHandler(this._buttonSaveResult_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1215, 558);
+            this.Controls.Add(this._buttonSaveResult);
             this.Controls.Add(this._labelGroundTruth);
             this.Controls.Add(this._labelInput);
             this.Controls.Add(this.label3);
@@ -239,6 +251,7 @@ namespace DIP_FinalProject
         #endregion
 
         private OpenFileDialog _openFile;
+        private SaveFileDialog _saveFile;
         private List<Bitmap> _inputImages;
         Bitmap _groundTruthImage;
         List<Point> _region;
@@ -262,6 +275,7 @@ namespace DIP_FinalProject
         private Label label3;
         private Label _labelInput;
         private Label _labelGroundTruth;
+        private Button _buttonSaveResult;
     }
 }
 

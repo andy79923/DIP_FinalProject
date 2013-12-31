@@ -18,6 +18,9 @@ namespace DIP_FinalProject
             _openFile = new OpenFileDialog();
             _openFile.InitialDirectory = "C:";
             _openFile.Filter = "Bitmap Files (.bmp)|*.bmp|JPEG (.jpg)|*.jpg|PNG (.png)|*.png|All Files|*.*";
+            _saveFile = new SaveFileDialog();
+            _saveFile.InitialDirectory = "C";
+            _saveFile.Filter = "Bitmap Files (.bmp)|*.bmp";
             _thresholdingLevel = 3;
         }
 
@@ -43,6 +46,7 @@ namespace DIP_FinalProject
             Bitmap inputImage = _inputImages[_listBoxInputImage.SelectedIndex];
             _pictureBoxInputImage.Image = inputImage;
             _pictureBoxResult.Image = inputImage;
+            _groupBoxMode.Enabled = false;
 
             _thresholdingRange = ImageProcessing.ImageProcessing.MultilevelThresholding(ref inputImage, out _thresholdingImage, _thresholdingLevel);
         }
@@ -162,6 +166,16 @@ namespace DIP_FinalProject
                 _labelDSC.Text = ImageProcessing.ImageProcessing.DiceSimilarityCoefficient(ref _region, ref region).ToString("0.00");
             }
 
+        }
+
+        private void _buttonSaveResult_Click(object sender, EventArgs e)
+        {
+            if (_saveFile.ShowDialog() == DialogResult.OK)
+            {
+                _result.Save(_saveFile.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                _saveFile.InitialDirectory = _saveFile.FileName.Substring(0, _saveFile.FileName.Length - 4);
+                _saveFile.FileName = "";
+            }
         }
     }
 }
