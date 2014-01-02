@@ -87,11 +87,12 @@ namespace ImageProcessing
                 return;
             }
             result = new Bitmap(image.Width, image.Height);
+            byte[] intensities = new byte[filterSize * filterSize];
+            int median = (filterSize * filterSize) / 2;
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    List<int> intensity = new List<int>();
                     for (int j = 0; j < filterSize; j++)//Use replicate to interpolate the pixel when the filter position is out of the boundary of the source image
                     {
                         int wY = y - filterSize / 2 + j;
@@ -102,12 +103,11 @@ namespace ImageProcessing
                             int wX = x - filterSize / 2 + i;
                             wX = (wX < 0) ? 0 : wX;
                             wX = (wX >= image.Width) ? image.Width - 1 : wX;
-                            intensity.Add((image.GetPixel(wX, wY).R));
+                            intensities[j * filterSize + i] = image.GetPixel(wX, wY).R;
                         }
                     }
-                    intensity.Sort();
-                    int median = intensity.Count / 2;
-                    result.SetPixel(x, y, Color.FromArgb(intensity[median], intensity[median], intensity[median]));
+                    Array.Sort(intensities);
+                    result.SetPixel(x, y, Color.FromArgb(intensities[median], intensities[median], intensities[median]));
                 }
             }
         }
