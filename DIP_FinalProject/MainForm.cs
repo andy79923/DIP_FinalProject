@@ -215,27 +215,51 @@ namespace DIP_FinalProject
                 _openFile.InitialDirectory = _openFile.FileName.Substring(0, _openFile.FileName.Length - _openFile.SafeFileName.Length);
                 _pictureBoxInputImage.Image = _groundTruthImage;
                 List<Point> contour = new List<Point>();
-                List<Point> region = new List<Point>();
+                bool[,] contourCheck = new bool[_groundTruthImage.Height, _groundTruthImage.Width];
                 for (int y = 0; y < _groundTruthImage.Height; y++)
                 {
-                    List<Point> rangePoint = new List<Point>();
                     for (int x = 0; x < _groundTruthImage.Width; x++)
                     {
                         Color RGB = _groundTruthImage.GetPixel(x, y);
                         if (RGB.R != RGB.G || RGB.R != RGB.B || RGB.G != RGB.B)
                         {
                             contour.Add(new Point(x, y));
-                            rangePoint.Add(new Point(x, y));
+                            contourCheck[y, x] = true;
                         }
                     }
-                    if (rangePoint.Count != 0)
+                }
+
+                List<Point> region = new List<Point>(contour);
+                bool[,] check = new bool[_groundTruthImage.Height, _groundTruthImage.Width];
+                Queue<Point> seeds = new Queue<Point>();
+                seeds.Enqueue(new Point(_seedPosition.X, _seedPosition.Y));
+                check[_seedPosition.Y, _seedPosition.X] = true;
+                while (seeds.Count != 0)
+                {
+                    Point seed = seeds.Dequeue();
+                    region.Add(new Point(seed.X, seed.Y));
+                    if (seed.X + 1 < _groundTruthImage.Width && contourCheck[seed.Y, seed.X + 1] == false && check[seed.Y, seed.X + 1] == false)
                     {
-                        int leftX = rangePoint[0].X;
-                        int rightX = rangePoint[rangePoint.Count - 1].X;
-                        for (int i = leftX; i <= rightX; i++)
-                        {
-                            region.Add(new Point(i, y));
-                        }
+                        seeds.Enqueue(new Point(seed.X + 1, seed.Y));
+                        check[seed.Y, seed.X + 1] = true;
+                    }
+
+                    if (seed.X - 1 >= 0 && contourCheck[seed.Y, seed.X - 1] == false && check[seed.Y, seed.X - 1] == false)
+                    {
+                        seeds.Enqueue(new Point(seed.X - 1, seed.Y));
+                        check[seed.Y, seed.X - 1] = true;
+                    }
+
+                    if (seed.Y + 1 < _groundTruthImage.Height && contourCheck[seed.Y + 1, seed.X] == false && check[seed.Y + 1, seed.X] == false)
+                    {
+                        seeds.Enqueue(new Point(seed.X, seed.Y + 1));
+                        check[seed.Y + 1, seed.X] = true;
+                    }
+
+                    if (seed.Y - 1 >= 0 && contourCheck[seed.Y - 1, seed.X] == false && check[seed.Y - 1, seed.X] == false)
+                    {
+                        seeds.Enqueue(new Point(seed.X, seed.Y - 1));
+                        check[seed.Y - 1, seed.X] = true;
                     }
                 }
 
