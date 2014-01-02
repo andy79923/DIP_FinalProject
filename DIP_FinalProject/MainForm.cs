@@ -53,11 +53,12 @@ namespace DIP_FinalProject
 
         private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)
         {
-            _groupBoxMode.Enabled = true;
-            if (_radioButtonSegmentationMode.Checked == false)
+            
+            if (_radioButtonSegmentationMode.Checked == false || _pictureBoxInputImage.Image==null)
             {
                 return;
             }
+            _groupBoxMode.Enabled = true;
             Bitmap image = _inputImages[_listBoxInputImage.SelectedIndex];
             _result = new Bitmap(image);
             Point seedPosition = new Point(e.X, e.Y);
