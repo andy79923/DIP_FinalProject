@@ -257,7 +257,6 @@ namespace DIP_FinalProject
         List<Point> _region;
         List<Point> _contour;
         Bitmap _result;
-        Bitmap _thresholdingImage;
         int[] _thresholdingRange;
         int _thresholdingLevel;
         private System.Windows.Forms.Button _buttonLoadImage;

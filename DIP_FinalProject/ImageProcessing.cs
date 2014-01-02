@@ -516,7 +516,6 @@ namespace ImageProcessing
         }
         static public double MeanOfAbsoluteDifference(ref List<Point> contourA, ref List<Point> contourB, double maxDistance)
         {
-            double MAD = 0;
             double minDistanceA = 0, minDistanceB = 0;
             for (int i = 0; i < contourA.Count; i++)
             {

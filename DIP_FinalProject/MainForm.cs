@@ -85,7 +85,7 @@ namespace DIP_FinalProject
                     }
                 }
             }
-            ImageProcessing.ImageProcessing.RegionGrowing(ref _thresholdingImage, out _region, out _contour, seedPosition, regionRange);
+            ImageProcessing.ImageProcessing.RegionGrowing(ref image, out _region, out _contour, seedPosition, regionRange);
             for (int i = 0; i < _contour.Count; i++)
             {
                 _result.SetPixel(_contour[i].X, _contour[i].Y, Color.FromArgb(255, 0, 0));
