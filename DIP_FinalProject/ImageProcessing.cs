@@ -433,7 +433,7 @@ namespace ImageProcessing
             }
         }
 
-        static public void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
+        static public void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour,ref Point originalSeed, Point thresholdRegion, bool countArea)
         {
             List<Point> contourPoint = new List<Point>();
             List<List<Point>> contours = new List<List<Point>>();
@@ -598,55 +598,80 @@ namespace ImageProcessing
             }
             contour = new List<Point>(contours[outerContour]);
 
-            //Find the area that is surrounded by the outer contour. 
-            region = new List<Point>(contour);
-            for (int i = 0; i < contour.Count; i++)
+            if (contourCheck[originalSeed.Y, originalSeed.X] == true)
             {
-                for (int y = 0; y < 3; y++)
+                int rightCount = 0;
+                for (int i = originalSeed.X + 1; i < image.Width && contourCheck[originalSeed.Y, i] != true && check[originalSeed.Y, i] == true; i++)
                 {
-                    for (int x = 0; x < 3; x++)
-                    {
-                        int wX = contour[i].X + x - 1;
-                        int wY = contour[i].Y + y - 1;
-                        if ((x == 1 && y == 1) || (wX < 0 || wX >= image.Width || wY < 0 || wY >= image.Height) || check[wY, wX] == false || contourCheck[wY, wX] == true) continue;
-                        int intensity = image.GetPixel(wX, wY).R;
-                        check[wY, wX] = false;
-                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
-                        {
-                            seeds.Enqueue(new Point(wX, wY));
-                        }
-                    }
+                    rightCount++;
+                }
+                int leftCount = 0;
+                for (int i = originalSeed.X - 1; i >= 0 && contourCheck[originalSeed.Y, i] != true && check[originalSeed.Y, i] == true; i--)
+                {
+                    leftCount++;
+                }
+                if (rightCount == 0 && leftCount != 0)
+                {
+                    originalSeed.X -= leftCount / 2;
+                }
+                else if (rightCount != 0 && leftCount == 0)
+                {
+                    originalSeed.X += rightCount;
+                }
+
+                int downCount = 0;
+                for (int i = originalSeed.Y + 1; i < image.Height && contourCheck[i, originalSeed.X] != true && check[i, originalSeed.X] == true; i++)
+                {
+                    downCount++;
+                }
+                int upCount = 0;
+                for (int i = originalSeed.Y - 1; i >=0 && contourCheck[i, originalSeed.X] != true && check[i, originalSeed.X] == true; i--)
+                {
+                    upCount++;
+                }
+                if (downCount == 0 && upCount != 0)
+                {
+                    originalSeed.Y -= upCount / 2;
+                }
+                else if (downCount != 0 && upCount == 0)
+                {
+                    originalSeed.Y += downCount / 2;
                 }
             }
+
+            region = new List<Point>(contour);
+            if (countArea == false)
+            {
+                return;
+            }
             check = new bool[image.Height, image.Width];
+            seeds.Enqueue(new Point(originalSeed.X, originalSeed.Y));
+            check[originalSeed.Y, originalSeed.X] = true;
             while (seeds.Count != 0)
             {
                 Point seed = seeds.Dequeue();
+                region.Add(new Point(seed.X, seed.Y));
                 if (seed.X + 1 < image.Width && contourCheck[seed.Y, seed.X + 1] == false && check[seed.Y, seed.X + 1] == false)
                 {
                     seeds.Enqueue(new Point(seed.X + 1, seed.Y));
-                    region.Add(new Point(seed.X + 1, seed.Y));
                     check[seed.Y, seed.X + 1] = true;
                 }
 
                 if (seed.X - 1 >= 0 && contourCheck[seed.Y, seed.X - 1] == false && check[seed.Y, seed.X - 1] == false)
                 {
                     seeds.Enqueue(new Point(seed.X - 1, seed.Y));
-                    region.Add(new Point(seed.X - 1, seed.Y));
                     check[seed.Y, seed.X - 1] = true;
                 }
 
                 if (seed.Y + 1 < image.Height && contourCheck[seed.Y + 1, seed.X] == false && check[seed.Y + 1, seed.X] == false)
                 {
                     seeds.Enqueue(new Point(seed.X, seed.Y + 1));
-                    region.Add(new Point(seed.X, seed.Y + 1));
                     check[seed.Y + 1, seed.X] = true;
                 }
 
                 if (seed.Y - 1 >= 0 && contourCheck[seed.Y - 1, seed.X] == false && check[seed.Y - 1, seed.X] == false)
                 {
                     seeds.Enqueue(new Point(seed.X, seed.Y - 1));
-                    region.Add(new Point(seed.X, seed.Y - 1));
                     check[seed.Y - 1, seed.X] = true;
                 }   
             }

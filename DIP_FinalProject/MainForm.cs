@@ -22,6 +22,7 @@ namespace DIP_FinalProject
             _saveFile.InitialDirectory = "C";
             _saveFile.Filter = "Bitmap Files (.bmp)|*.bmp";
             _thresholdingLevel = 3;
+            _seedPosition = new Point();
         }
 
         private void _buttonLoadImage_Click(object sender, EventArgs e)
@@ -61,9 +62,10 @@ namespace DIP_FinalProject
             _groupBoxMode.Enabled = true;
             Bitmap image = _inputImages[_listBoxInputImage.SelectedIndex];
             _result = new Bitmap(image);
-            Point seedPosition = new Point(e.X, e.Y);
+            _seedPosition.X = e.X;
+            _seedPosition.Y = e.Y;
             Point regionRange=new Point();
-            int seedIntensity = image.GetPixel(seedPosition.X, seedPosition.Y).R;
+            int seedIntensity = image.GetPixel(_seedPosition.X, _seedPosition.Y).R;
             if (seedIntensity <= _thresholdingRange[0])
             {
                 regionRange.X = -1;
@@ -86,7 +88,7 @@ namespace DIP_FinalProject
                     }
                 }
             }
-            ImageProcessing.ImageProcessing.RegionGrowing(ref image, out _region, out _contour, seedPosition, regionRange);
+            ImageProcessing.ImageProcessing.RegionGrowing(ref image, out _region, out _contour, ref _seedPosition, regionRange, false);
 
             int top = image.Height - 1, bottom = 0, left = image.Width - 1, right = 0;
             for (int i = 0; i < _contour.Count; i++)
@@ -134,7 +136,8 @@ namespace DIP_FinalProject
             List<Point> roiRegion, roiContour;
             _contour = new List<Point>();
             _region = new List<Point>();
-            ImageProcessing.ImageProcessing.RegionGrowing(ref ROI, out roiRegion, out roiContour, new Point(seedPosition.X - left, seedPosition.Y - top), regionRange);
+            Point shiftPoint = new Point(_seedPosition.X - left, _seedPosition.Y - top);
+            ImageProcessing.ImageProcessing.RegionGrowing(ref ROI, out roiRegion, out roiContour, ref shiftPoint, regionRange, true);
 
             bool[,] roiRegionCheck = new bool[ROI.Height, ROI.Width];
             List<Point> ehanceContour = new List<Point>();
