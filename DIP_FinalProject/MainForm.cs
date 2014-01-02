@@ -48,7 +48,7 @@ namespace DIP_FinalProject
             _pictureBoxResult.Image = inputImage;
             _groupBoxMode.Enabled = false;
 
-            _thresholdingRange = ImageProcessing.ImageProcessing.MultilevelThresholding(ref inputImage, out _thresholdingImage, _thresholdingLevel);
+            _thresholdingRange = ImageProcessing.ImageProcessing.OtsuMethod(ref inputImage, _thresholdingLevel);
         }
 
         private void _pictureBoxInputImage_MouseClick(object sender, MouseEventArgs e)

@@ -47,19 +47,6 @@ namespace ImageProcessing
             }
         }
 
-        static public void Thresholding(ref Bitmap image, out Bitmap result, int thresholdValue)//the image should be a gray level image
-        {
-            result = new Bitmap(image.Width, image.Height);
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    byte intensity = image.GetPixel(x, y).R;
-                    result.SetPixel(x, y, (intensity > thresholdValue) ? Color.FromArgb(255, 255, 255) : Color.FromArgb(0, 0, 0));
-                }
-            }
-        }
-
         static public void MeanSmoothing(ref Bitmap image, out Bitmap result, int filterSize)//the image should be a gray level image
         {
             if (filterSize % 2 != 1)
@@ -415,21 +402,19 @@ namespace ImageProcessing
             return threshold;
         }
 
-        static public int[] MultilevelThresholding(ref Bitmap image, out Bitmap result, int levelNum)
+        static public void Thresholding(ref Bitmap image, out Bitmap result, int[] thresholdValue, int levelNum)//the image should be a gray level image
         {
             result = new Bitmap(image.Width, image.Height);
-            int[] threshold = OtsuMethod(ref image, levelNum);
-
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)
                 {
                     int intensity = image.GetPixel(x, y).R;
-                    if (intensity <= threshold[0])
+                    if (intensity <= thresholdValue[0])
                     {
                         result.SetPixel(x, y, Color.FromArgb(0, 0, 0));
                     }
-                    else if (intensity > threshold[levelNum - 2])
+                    else if (intensity > thresholdValue[levelNum - 2])
                     {
                         result.SetPixel(x, y, Color.FromArgb(255, 255, 255));
                     }
@@ -437,16 +422,15 @@ namespace ImageProcessing
                     {
                         for (int k = 1; k < levelNum - 1; k++)
                         {
-                            if (intensity <= threshold[k])
+                            if (intensity <= thresholdValue[k])
                             {
-                                int value = (threshold[k - 1] + threshold[k]) / 2;
+                                int value = (thresholdValue[k - 1] + thresholdValue[k]) / 2;
                                 result.SetPixel(x, y, Color.FromArgb(value, value, value));
                             }
                         }
                     }
                 }
             }
-            return threshold;
         }
 
         static public void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
