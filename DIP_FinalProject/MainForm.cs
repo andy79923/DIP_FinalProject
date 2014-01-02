@@ -135,6 +135,34 @@ namespace DIP_FinalProject
             _contour = new List<Point>();
             _region = new List<Point>();
             ImageProcessing.ImageProcessing.RegionGrowing(ref ROI, out roiRegion, out roiContour, new Point(seedPosition.X - left, seedPosition.Y - top), regionRange);
+
+            bool[,] roiRegionCheck = new bool[ROI.Height, ROI.Width];
+            List<Point> ehanceContour = new List<Point>();
+            for (int i = 0; i < roiRegion.Count; i++)
+            {
+                roiRegionCheck[roiRegion[i].Y, roiRegion[i].X] = true;
+            }
+
+            for (int i = 0; i < roiContour.Count; i++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int x = 0; x < 3; x++)
+                    {
+                        int wX = roiContour[i].X + x - 1;
+                        int wY = roiContour[i].Y + y - 1;
+                        if (x == 1 && y == 1 || (wX < 0 || wX >= ROI.Width || wY < 0 || wY >= ROI.Height) || roiRegionCheck[wY, wX] == true) continue;
+                        roiRegionCheck[wY, wX] = true;
+                        ehanceContour.Add(new Point(wX, wY));
+                        //roiContour.Add(new Point(wX, wY));
+                        roiRegion.Add(new Point(wX, wY));
+                    }
+                }
+            }
+            for (int i = 0; i < ehanceContour.Count; i++)
+            {
+                roiContour.Add(new Point(ehanceContour[i].X, ehanceContour[i].Y));
+            }
             for (int i = 0; i < roiContour.Count; i++)
             {
                 _contour.Add(new Point(roiContour[i].X + left, roiContour[i].Y + top));
