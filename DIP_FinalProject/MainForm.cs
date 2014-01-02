@@ -86,9 +86,62 @@ namespace DIP_FinalProject
                 }
             }
             ImageProcessing.ImageProcessing.RegionGrowing(ref image, out _region, out _contour, seedPosition, regionRange);
+
+            int top = image.Height - 1, bottom = 0, left = image.Width - 1, right = 0;
             for (int i = 0; i < _contour.Count; i++)
             {
+                if (_contour[i].X < left)
+                {
+                    left = _contour[i].X;
+                }
+                if (_contour[i].X > right)
+                {
+                    right = _contour[i].X;
+                }
+                if (_contour[i].Y < top)
+                {
+                    top = _contour[i].Y;
+                }
+                if (_contour[i].Y > bottom)
+                {
+                    bottom = _contour[i].Y;
+                }
+            }
+            top = (top - 3 >= 0) ? top - 3 : top;
+            bottom = (bottom + 3 < image.Height) ? bottom + 3 : bottom;
+            right = (right + 3 < image.Width) ? right + 3 : right;
+            left = (left - 3 >= 0) ? left - 3 : left;
+            Bitmap ROI = new Bitmap(right - left + 1, bottom - top + 1);
+            Bitmap smoothingROI;
+            for (int y = 0; y < ROI.Height; y++)
+            {
+                for (int x = 0; x < ROI.Width; x++)
+                {
+                    int intensity = image.GetPixel(x + left, y + top).R;
+                    ROI.SetPixel(x, y, Color.FromArgb(intensity, intensity, intensity));
+                }
+            }
+            ImageProcessing.ImageProcessing.Thresholding(ref ROI, out smoothingROI, _thresholdingRange, _thresholdingLevel);
+            ROI = new Bitmap(smoothingROI);
+
+            int smoothingTimes = (int)(((double)image.Width / (double)ROI.Width + (double)image.Height / (double)ROI.Height + 1) / 2);
+            for (int i = 0; i < smoothingTimes; i++)
+            {
+                ImageProcessing.ImageProcessing.MedianSmoothing(ref ROI, out smoothingROI, 3);
+                ROI = new Bitmap(smoothingROI);
+            }
+            List<Point> roiRegion, roiContour;
+            _contour = new List<Point>();
+            _region = new List<Point>();
+            ImageProcessing.ImageProcessing.RegionGrowing(ref ROI, out roiRegion, out roiContour, new Point(seedPosition.X - left, seedPosition.Y - top), regionRange);
+            for (int i = 0; i < roiContour.Count; i++)
+            {
+                _contour.Add(new Point(roiContour[i].X + left, roiContour[i].Y + top));
                 _result.SetPixel(_contour[i].X, _contour[i].Y, Color.FromArgb(255, 0, 0));
+            }
+            for (int i = 0; i < roiRegion.Count; i++)
+            {
+                _region.Add(new Point(roiRegion[i].X + left, roiRegion[i].Y + top));
             }
             _pictureBoxResult.Image = _result;
         }
