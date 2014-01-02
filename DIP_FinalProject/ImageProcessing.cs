@@ -598,23 +598,22 @@ namespace ImageProcessing
             }
             contour = new List<Point>(contours[outerContour]);
 
-
             //Find the area that is surrounded by the outer contour. 
             region = new List<Point>(contour);
-            check = new bool[image.Height, image.Width];
             for (int i = 0; i < contour.Count; i++)
             {
                 for (int y = 0; y < 3; y++)
                 {
                     for (int x = 0; x < 3; x++)
                     {
-                        int wX = originalSeed.X + x - 1;
-                        int wY = originalSeed.Y + y - 1;
-                        if (x == 1 && y == 1 || (wX < 0 || wX >= image.Width || wY < 0 || wY >= image.Height) || check[wY, wX] == true) continue;
+                        int wX = contour[i].X + x - 1;
+                        int wY = contour[i].Y + y - 1;
+                        if ((x == 1 && y == 1) || (wX < 0 || wX >= image.Width || wY < 0 || wY >= image.Height) || check[wY, wX] == false || contourCheck[wY, wX] == true) continue;
                         int intensity = image.GetPixel(wX, wY).R;
+                        check[wY, wX] = false;
                         if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
                         {
-                            seeds.Enqueue(originalSeed);
+                            seeds.Enqueue(new Point(wX, wY));
                         }
                     }
                 }

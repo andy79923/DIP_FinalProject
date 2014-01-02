@@ -154,7 +154,6 @@ namespace DIP_FinalProject
                         if (x == 1 && y == 1 || (wX < 0 || wX >= ROI.Width || wY < 0 || wY >= ROI.Height) || roiRegionCheck[wY, wX] == true) continue;
                         roiRegionCheck[wY, wX] = true;
                         ehanceContour.Add(new Point(wX, wY));
-                        //roiContour.Add(new Point(wX, wY));
                         roiRegion.Add(new Point(wX, wY));
                     }
                 }
