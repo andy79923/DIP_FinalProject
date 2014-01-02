@@ -270,8 +270,8 @@ namespace DIP_FinalProject
                     return;
                 }
 
-                _labelMAD.Text = ImageProcessing.ImageProcessing.MeanOfAbsoluteDifference(ref _contour, ref  contour, Math.Sqrt(Math.Pow(_groundTruthImage.Width, 2) + Math.Pow(_groundTruthImage.Height, 2))).ToString("0.00");
-                _labelDSC.Text = ImageProcessing.ImageProcessing.DiceSimilarityCoefficient(ref _region, ref region).ToString("0.00");
+                _labelMAD.Text = ImageProcessing.ImageProcessing.MeanOfAbsoluteDifference(ref _contour, ref  contour, Math.Sqrt(Math.Pow(_groundTruthImage.Width, 2) + Math.Pow(_groundTruthImage.Height, 2))).ToString("0.000");
+                _labelDSC.Text = ImageProcessing.ImageProcessing.DiceSimilarityCoefficient(ref _region, ref region).ToString("0.000");
             }
 
         }
