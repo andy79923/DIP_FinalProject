@@ -435,8 +435,8 @@ namespace ImageProcessing
 
         static public void RegionGrowing(ref Bitmap image, out List<Point> region, out List<Point> contour, Point originalSeed, Point thresholdRegion)
         {
-            region = new List<Point>();
-            contour = new List<Point>();
+            List<Point> contourPoint = new List<Point>();
+            List<List<Point>> contours = new List<List<Point>>();
             int threshold = image.GetPixel(originalSeed.X, originalSeed.Y).R;
             bool[,] check = new bool[image.Height, image.Width];
             check[originalSeed.Y, originalSeed.X] = true;
@@ -444,6 +444,7 @@ namespace ImageProcessing
             Queue<Point> seeds = new Queue<Point>();
             seeds.Enqueue(originalSeed);
 
+            //Find all points of contour.
             while (seeds.Count != 0)
             {
                 Point seed = seeds.Dequeue();
@@ -457,7 +458,6 @@ namespace ImageProcessing
                         if (check[seed.Y, seed.X + 1] == false)
                         {
                             seeds.Enqueue(new Point(seed.X + 1, seed.Y));
-                            region.Add(new Point(seed.X + 1, seed.Y));
                             check[seed.Y, seed.X + 1] = true;
                         }
                     }
@@ -472,7 +472,6 @@ namespace ImageProcessing
                         if (check[seed.Y, seed.X - 1] == false)
                         {
                             seeds.Enqueue(new Point(seed.X - 1, seed.Y));
-                            region.Add(new Point(seed.X - 1, seed.Y));
                             check[seed.Y, seed.X - 1] = true;
                         }
                     }
@@ -487,7 +486,6 @@ namespace ImageProcessing
                         if (check[seed.Y + 1, seed.X] == false)
                         {
                             seeds.Enqueue(new Point(seed.X, seed.Y + 1));
-                            region.Add(new Point(seed.X, seed.Y + 1));
                             check[seed.Y + 1, seed.X] = true;
                         }
                     }
@@ -502,7 +500,6 @@ namespace ImageProcessing
                         if (check[seed.Y - 1, seed.X] == false)
                         {
                             seeds.Enqueue(new Point(seed.X, seed.Y - 1));
-                            region.Add(new Point(seed.X, seed.Y - 1));
                             check[seed.Y - 1, seed.X] = true;
                         }
                     }
@@ -510,10 +507,152 @@ namespace ImageProcessing
 
                 if (seekCount < 4)
                 {
-                    contour.Add(new Point(seed.X, seed.Y));
+                    contourPoint.Add(new Point(seed.X, seed.Y));
                 }
             }
+
+            //Find the outer contour of all contours in the region. 
+            //The inner contours probably attaches to the outer contour, if it is nearby the outer contour.
+            int outerContour = 0;
+            contours.Add(new List<Point>());
+            contours[0].Add(contourPoint[0]);
+            contourPoint.RemoveAt(0);
+            bool[,] contourCheck = new bool[image.Height, image.Width];
+            for (int i = 0; i < contours.Count; i++)
+            {
+                for (int j = 0; j < contours[i].Count && contourPoint.Count != 0; j++)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        for (int x = 0; x < 3; x++)
+                        {
+                            if (y == 1 && x == 1) continue;
+                            int position = contourPoint.IndexOf(new Point(contours[i][j].X + x - 1, contours[i][j].Y + y - 1));
+                            if (position != -1)
+                            {
+                                contours[i].Add(contourPoint[position]);
+                                contourPoint.RemoveAt(position);
+                            }
+                        }
+                    }
+                }
+                if (contourPoint.Count != 0)
+                {
+                    contours.Add(new List<Point>());
+                    contours[contours.Count - 1].Add(contourPoint[0]);
+                    contourPoint.RemoveAt(0);
+                }
+
+                if (contours.Count < 2)
+                {
+                    for (int j = 0; j < contours[outerContour].Count; j++)
+                    {
+                        contourCheck[contours[outerContour][j].Y, contours[outerContour][j].X] = true;
+                    }
+                }
+                else
+                {
+                    int outerCount = 0;
+                    for (int j = contours[i][0].X + 1; j < image.Width; j++)
+                    {
+                        if (contourCheck[contours[i][0].Y, j] == true)
+                        {
+                            outerCount++;
+                            break;
+                        }
+                    }
+                    for (int j = contours[i][0].X - 1; j >= 0; j--)
+                    {
+                        if (contourCheck[contours[i][0].Y, j] == true)
+                        {
+                            outerCount++;
+                            break;
+                        }
+                    }
+                    for (int j = contours[i][0].Y + 1; j < image.Height; j++)
+                    {
+                        if (contourCheck[j, contours[i][0].X] == true)
+                        {
+                            outerCount++;
+                            break;
+                        }
+                    }
+                    for (int j = contours[i][0].Y - 1; j >= 0; j--)
+                    {
+                        if (contourCheck[j, contours[i][0].X] == true)
+                        {
+                            outerCount++;
+                            break;
+                        }
+                    }
+                    if (outerCount != 4)
+                    {
+                        outerContour = i;
+                        contourCheck = new bool[image.Height, image.Width];
+                        for (int j = 0; j < contours[outerContour].Count; j++)
+                        {
+                            contourCheck[contours[outerContour][j].Y, contours[outerContour][j].X] = true;
+                        }
+                    }
+                }
+            }
+            contour = new List<Point>(contours[outerContour]);
+
+
+            //Find the area that is surrounded by the outer contour. 
+            region = new List<Point>(contour);
+            check = new bool[image.Height, image.Width];
+            for (int i = 0; i < contour.Count; i++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int x = 0; x < 3; x++)
+                    {
+                        int wX = originalSeed.X + x - 1;
+                        int wY = originalSeed.Y + y - 1;
+                        if (x == 1 && y == 1 || (wX < 0 || wX >= image.Width || wY < 0 || wY >= image.Height) || check[wY, wX] == true) continue;
+                        int intensity = image.GetPixel(wX, wY).R;
+                        if (intensity > thresholdRegion.X && intensity <= thresholdRegion.Y)
+                        {
+                            seeds.Enqueue(originalSeed);
+                        }
+                    }
+                }
+            }
+            check = new bool[image.Height, image.Width];
+            while (seeds.Count != 0)
+            {
+                Point seed = seeds.Dequeue();
+                if (seed.X + 1 < image.Width && contourCheck[seed.Y, seed.X + 1] == false && check[seed.Y, seed.X + 1] == false)
+                {
+                    seeds.Enqueue(new Point(seed.X + 1, seed.Y));
+                    region.Add(new Point(seed.X + 1, seed.Y));
+                    check[seed.Y, seed.X + 1] = true;
+                }
+
+                if (seed.X - 1 >= 0 && contourCheck[seed.Y, seed.X - 1] == false && check[seed.Y, seed.X - 1] == false)
+                {
+                    seeds.Enqueue(new Point(seed.X - 1, seed.Y));
+                    region.Add(new Point(seed.X - 1, seed.Y));
+                    check[seed.Y, seed.X - 1] = true;
+                }
+
+                if (seed.Y + 1 < image.Height && contourCheck[seed.Y + 1, seed.X] == false && check[seed.Y + 1, seed.X] == false)
+                {
+                    seeds.Enqueue(new Point(seed.X, seed.Y + 1));
+                    region.Add(new Point(seed.X, seed.Y + 1));
+                    check[seed.Y + 1, seed.X] = true;
+                }
+
+                if (seed.Y - 1 >= 0 && contourCheck[seed.Y - 1, seed.X] == false && check[seed.Y - 1, seed.X] == false)
+                {
+                    seeds.Enqueue(new Point(seed.X, seed.Y - 1));
+                    region.Add(new Point(seed.X, seed.Y - 1));
+                    check[seed.Y - 1, seed.X] = true;
+                }   
+            }
         }
+
         static public double MeanOfAbsoluteDifference(ref List<Point> contourA, ref List<Point> contourB, double maxDistance)
         {
             double minDistanceA = 0, minDistanceB = 0;
